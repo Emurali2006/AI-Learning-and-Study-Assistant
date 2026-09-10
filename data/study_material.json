@@ -1,0 +1,605 @@
+[
+  {
+    "subject": "Operating Systems",
+    "topic": "Process",
+    "difficulty": "beginner",
+    "explanation": "A process is a program in execution. It is an active entity that requires system resources such as CPU time, memory, files, and I/O devices to accomplish its task. Unlike a program, which is a passive entity stored on disk, a process is dynamic and has its own execution context.",
+    "key_points": [
+      "A process is a program in execution (active entity)",
+      "Each process has its own Process Control Block (PCB)",
+      "A process can be in one of several states: New, Ready, Running, Waiting, Terminated",
+      "Processes require system resources: CPU, memory, I/O devices",
+      "The OS is responsible for process creation, scheduling, and termination",
+      "Processes communicate via Inter-Process Communication (IPC)"
+    ],
+    "examples": [
+      "A running web browser like Chrome is a process",
+      "A running Python script is a process",
+      "When you open Microsoft Word, the OS creates a process for it"
+    ]
+  },
+  {
+    "subject": "Operating Systems",
+    "topic": "Thread",
+    "difficulty": "beginner",
+    "explanation": "A thread is the smallest unit of CPU execution within a process. A process can have multiple threads, all sharing the same memory space and resources of the parent process. Threads within a process run concurrently and share code, data, and OS resources.",
+    "key_points": [
+      "A thread is a lightweight sub-process",
+      "Threads share the memory and resources of their parent process",
+      "Each thread has its own stack, registers, and program counter",
+      "Multi-threading improves application performance and responsiveness",
+      "Context switching between threads is faster than between processes",
+      "Types: User-level threads and Kernel-level threads"
+    ],
+    "examples": [
+      "A web browser uses separate threads for rendering, network requests, and user interface",
+      "A word processor uses one thread for typing input and another for spell-checking"
+    ]
+  },
+  {
+    "subject": "Operating Systems",
+    "topic": "CPU Scheduling",
+    "difficulty": "intermediate",
+    "explanation": "CPU Scheduling is the process by which the OS decides which process gets the CPU at any given time. Since only one process can run on a CPU core at a time, scheduling is essential for efficient CPU utilization and fair resource allocation.",
+    "key_points": [
+      "Goal: Maximize CPU utilization and throughput, minimize waiting and response time",
+      "FCFS (First Come First Served): Simple, non-preemptive, can cause convoy effect",
+      "SJF (Shortest Job First): Optimal average waiting time, may cause starvation",
+      "Round Robin: Each process gets equal time slices (quantum), suitable for time-sharing",
+      "Priority Scheduling: Higher priority processes run first, can cause starvation",
+      "Multilevel Queue: Processes divided into groups with separate queues"
+    ],
+    "examples": [
+      "Round Robin with quantum=4ms: P1 runs 4ms, then P2 runs 4ms, then P3, cycling back",
+      "In SJF, if processes have burst times 8, 4, 9, 5, the order is P2, P4, P1, P3"
+    ]
+  },
+  {
+    "subject": "Operating Systems",
+    "topic": "Deadlock",
+    "difficulty": "intermediate",
+    "explanation": "A deadlock is a situation where a set of processes are blocked because each process is holding a resource and waiting to acquire a resource held by another process. No process can make progress.",
+    "key_points": [
+      "Four necessary conditions (Coffman): Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait",
+      "Deadlock Prevention: Eliminate one of the four conditions",
+      "Deadlock Avoidance: Banker Algorithm - only allocate if state remains safe",
+      "Deadlock Detection: Allow deadlock, detect it, and recover",
+      "Resource Allocation Graph (RAG) is used to detect deadlocks",
+      "Recovery: Process termination or resource preemption"
+    ],
+    "examples": [
+      "Process A holds Printer and waits for Scanner; Process B holds Scanner and waits for Printer - deadlock!",
+      "Two trains on the same track heading toward each other - neither can move"
+    ]
+  },
+  {
+    "subject": "Operating Systems",
+    "topic": "Paging",
+    "difficulty": "intermediate",
+    "explanation": "Paging is a memory management technique that eliminates external fragmentation by dividing physical memory into fixed-sized frames and logical memory into pages of the same size.",
+    "key_points": [
+      "Physical memory divided into fixed-size blocks called frames",
+      "Logical memory divided into blocks of same size called pages",
+      "Page table maps logical page numbers to physical frame numbers",
+      "Eliminates external fragmentation but causes internal fragmentation",
+      "Page size is typically 4KB in modern systems",
+      "TLB (Translation Lookaside Buffer) caches recent page table entries for speed"
+    ],
+    "examples": [
+      "If page size = 4KB and a process needs 13KB, it gets 4 pages (internal fragmentation in last page)",
+      "Logical address is split into page number and offset to find physical address"
+    ]
+  },
+  {
+    "subject": "Operating Systems",
+    "topic": "Virtual Memory",
+    "difficulty": "advanced",
+    "explanation": "Virtual memory is a memory management technique that gives each process the illusion of having a large contiguous address space even when physical RAM is limited. It uses disk space as an extension of RAM.",
+    "key_points": [
+      "Allows execution of programs larger than physical memory",
+      "Uses disk space (swap space) as extended memory",
+      "Demand paging: pages loaded into memory only when needed",
+      "Page fault occurs when a required page is not in memory",
+      "Page replacement algorithms: FIFO, LRU, Optimal",
+      "Thrashing occurs when too much time is spent paging in/out"
+    ],
+    "examples": [
+      "A 4GB program can run on a system with 2GB RAM using virtual memory",
+      "When Windows slows down with many programs open, the page file (virtual memory) is being used"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "Database",
+    "difficulty": "beginner",
+    "explanation": "A database is an organized collection of structured data stored electronically. A DBMS (Database Management System) is software that provides an interface to store, retrieve, and manage data.",
+    "key_points": [
+      "Database: organized collection of related data",
+      "DBMS: software to manage the database (MySQL, Oracle, SQLite, PostgreSQL)",
+      "Advantages: Data sharing, reduced redundancy, data integrity, security, backup",
+      "Types: Relational (tables), NoSQL (documents, graphs, key-value), hierarchical",
+      "Schema: structure/blueprint of the database",
+      "Instance: actual data stored at a particular moment"
+    ],
+    "examples": [
+      "A university database storing student records, courses, and grades",
+      "An e-commerce database storing product catalog, orders, and customer information",
+      "MySQL, Oracle, SQLite are popular DBMS software"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "Primary Key",
+    "difficulty": "beginner",
+    "explanation": "A primary key is a column or combination of columns in a table that uniquely identifies each row. It cannot contain NULL values and must be unique for every record.",
+    "key_points": [
+      "Uniquely identifies each record in a table",
+      "Cannot have NULL values",
+      "Cannot have duplicate values",
+      "A table can have only one primary key",
+      "Can be a single column or composite (multiple columns)",
+      "Often implemented as auto-increment integers"
+    ],
+    "examples": [
+      "Student_ID in a Students table (each student has a unique ID)",
+      "Employee_ID in an Employees table",
+      "Email address can be a primary key if each user has a unique email"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "Foreign Key",
+    "difficulty": "beginner",
+    "explanation": "A foreign key is a column in one table that references the primary key of another table. It establishes a relationship between two tables and enforces referential integrity.",
+    "key_points": [
+      "Creates a link between two tables",
+      "References the primary key of another (parent) table",
+      "Enforces referential integrity",
+      "Can have NULL values (unless specified NOT NULL)",
+      "The child table cannot have a value not present in the parent table",
+      "Prevents orphaned records"
+    ],
+    "examples": [
+      "Orders table has Customer_ID as foreign key referencing Customers table",
+      "Enrollment table has Student_ID (FK to Students) and Course_ID (FK to Courses)",
+      "You cannot add an order for a customer that does not exist"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "Normalization",
+    "difficulty": "intermediate",
+    "explanation": "Normalization is the process of organizing a relational database to reduce data redundancy and improve data integrity. It involves dividing large tables into smaller ones according to Normal Forms: 1NF, 2NF, 3NF, BCNF.",
+    "key_points": [
+      "1NF: Each column must contain atomic values; no repeating groups",
+      "2NF: Must be in 1NF + every non-key attribute fully depends on entire primary key",
+      "3NF: Must be in 2NF + no transitive dependencies",
+      "BCNF: Stronger version of 3NF - every functional dependency must have a superkey",
+      "Benefits: Reduces redundancy, prevents anomalies (insert, update, delete), saves storage",
+      "Denormalization: Intentionally adding redundancy for performance"
+    ],
+    "examples": [
+      "Before: Student(ID, Name, Course1, Course2, Course3) - violates 1NF",
+      "After 1NF: Student(ID, Name), Enrollment(StudentID, Course) - atomic values",
+      "After 2NF: Order(OrderID, ProductID, Quantity), Product(ProductID, ProductName)"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "SQL",
+    "difficulty": "beginner",
+    "explanation": "SQL (Structured Query Language) is the standard language for managing and manipulating relational databases. It allows CRUD operations: Create, Read, Update, Delete.",
+    "key_points": [
+      "DDL (Data Definition Language): CREATE, ALTER, DROP, TRUNCATE",
+      "DML (Data Manipulation Language): SELECT, INSERT, UPDATE, DELETE",
+      "DCL (Data Control Language): GRANT, REVOKE",
+      "TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT",
+      "SELECT with WHERE, ORDER BY, GROUP BY, HAVING, JOIN are fundamental",
+      "Joins: INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN"
+    ],
+    "examples": [
+      "SELECT * FROM Students WHERE Age > 18;",
+      "INSERT INTO Students (ID, Name, Age) VALUES (1, 'Alice', 20);",
+      "SELECT s.Name FROM Students s INNER JOIN Enrollments e ON s.ID = e.StudentID;"
+    ]
+  },
+  {
+    "subject": "DBMS",
+    "topic": "Transactions",
+    "difficulty": "intermediate",
+    "explanation": "A transaction is a sequence of database operations treated as a single logical unit of work. Transactions must satisfy ACID properties to ensure data integrity.",
+    "key_points": [
+      "Atomicity: All operations succeed or all fail (all-or-nothing)",
+      "Consistency: Database moves from one consistent state to another",
+      "Isolation: Concurrent transactions do not interfere with each other",
+      "Durability: Committed transactions are permanently saved even after system failure",
+      "COMMIT saves changes; ROLLBACK undoes changes",
+      "Concurrency problems: Dirty Read, Non-repeatable Read, Phantom Read"
+    ],
+    "examples": [
+      "Bank transfer: Deduct from Account A AND Add to Account B - both must happen or neither",
+      "If power fails during a transfer, ACID ensures the database is not inconsistent",
+      "BEGIN TRANSACTION; UPDATE Accounts SET Balance=Balance-100 WHERE ID=1; COMMIT;"
+    ]
+  },
+  {
+    "subject": "C++",
+    "topic": "Class and Object",
+    "difficulty": "beginner",
+    "explanation": "In C++, a class is a user-defined blueprint that defines attributes (data members) and behaviors (member functions). An object is an instance of a class.",
+    "key_points": [
+      "Class: blueprint/template; Object: instance of a class",
+      "Data members: variables that store the object state",
+      "Member functions: functions that define object behavior",
+      "Access specifiers: public, private, protected",
+      "Objects are created using the class name",
+      "Dot operator (.) is used to access members of an object"
+    ],
+    "examples": [
+      "class Car { public: string brand; void drive() { cout << brand << ' is driving'; } };",
+      "Car myCar; myCar.brand = 'Toyota'; myCar.drive();",
+      "A Student class with attributes name, rollNo and methods study(), takeExam()"
+    ]
+  },
+  {
+    "subject": "C++",
+    "topic": "Constructor",
+    "difficulty": "beginner",
+    "explanation": "A constructor is a special member function automatically called when an object is created. It has the same name as the class and no return type. Its purpose is to initialize the object data members.",
+    "key_points": [
+      "Same name as the class, no return type",
+      "Automatically called when an object is created",
+      "Default constructor: no parameters",
+      "Parameterized constructor: accepts parameters to initialize members",
+      "Copy constructor: creates a new object as a copy of an existing object",
+      "Constructor overloading: multiple constructors with different parameter lists"
+    ],
+    "examples": [
+      "class Student { public: string name; int age; Student(string n, int a) { name=n; age=a; } };",
+      "Student s1('Alice', 20); // parameterized constructor called automatically",
+      "Student s2 = s1; // copy constructor called"
+    ]
+  },
+  {
+    "subject": "C++",
+    "topic": "Inheritance",
+    "difficulty": "intermediate",
+    "explanation": "Inheritance is an OOP concept where a derived class acquires properties and behaviors of a base class. It promotes code reuse and establishes an IS-A relationship.",
+    "key_points": [
+      "Promotes code reuse - derived class inherits base class members",
+      "IS-A relationship: Dog IS-A Animal, Car IS-A Vehicle",
+      "Types: Single, Multiple, Multilevel, Hierarchical, Hybrid",
+      "Derived class can override base class methods",
+      "Constructor of base class is called first, then derived class constructor",
+      "The virtual keyword enables runtime polymorphism"
+    ],
+    "examples": [
+      "class Animal { public: void eat() { cout << 'eating'; } };",
+      "class Dog : public Animal { public: void bark() { cout << 'woof'; } };",
+      "Dog d; d.eat(); d.bark(); // Dog inherits eat() from Animal"
+    ]
+  },
+  {
+    "subject": "C++",
+    "topic": "Polymorphism",
+    "difficulty": "intermediate",
+    "explanation": "Polymorphism means many forms. In C++, it allows a single interface to represent different underlying forms. Types: compile-time (function overloading) and runtime (virtual functions).",
+    "key_points": [
+      "Compile-time (Static) Polymorphism: Function overloading, Operator overloading",
+      "Runtime (Dynamic) Polymorphism: Function overriding using virtual functions",
+      "Virtual functions: declared with virtual keyword in base class",
+      "Pure virtual functions (=0): make a class abstract",
+      "Virtual table (vtable) implements runtime polymorphism"
+    ],
+    "examples": [
+      "Function overloading: int add(int a, int b); float add(float a, float b);",
+      "virtual void sound() in Animal class; Dog overrides to Woof; Cat overrides to Meow",
+      "Animal* ptr = new Dog(); ptr->sound(); // prints Woof - runtime polymorphism"
+    ]
+  },
+  {
+    "subject": "C++",
+    "topic": "Function Overloading",
+    "difficulty": "beginner",
+    "explanation": "Function overloading allows multiple functions to have the same name but different parameter lists. The compiler selects the correct function based on arguments at compile time.",
+    "key_points": [
+      "Same function name, different parameter lists",
+      "Resolved at compile time (static/early binding)",
+      "Parameters must differ in: number, type, or order",
+      "Return type alone cannot differentiate overloaded functions",
+      "Improves code readability"
+    ],
+    "examples": [
+      "int add(int a, int b); // two integers",
+      "float add(float a, float b); // two floats",
+      "int add(int a, int b, int c); // three integers",
+      "All named add - compiler picks the right one based on arguments"
+    ]
+  },
+  {
+    "subject": "Java",
+    "topic": "Class and Object",
+    "difficulty": "beginner",
+    "explanation": "In Java, a class is a blueprint for creating objects. It defines the data (fields) and behavior (methods). Java is fully object-oriented.",
+    "key_points": [
+      "Class: template/blueprint; Object: instance of a class",
+      "Fields (instance variables) store the state of an object",
+      "Methods define the behavior of an object",
+      "Access modifiers: public, private, protected, default",
+      "Objects are created using the new keyword",
+      "Java garbage collector automatically frees unused object memory",
+      "The this keyword refers to the current object"
+    ],
+    "examples": [
+      "class Dog { String name; void bark() { System.out.println('Woof!'); } }",
+      "Dog myDog = new Dog(); // creating an object",
+      "myDog.name = 'Buddy'; myDog.bark(); // accessing members"
+    ]
+  },
+  {
+    "subject": "Java",
+    "topic": "Inheritance",
+    "difficulty": "intermediate",
+    "explanation": "Inheritance in Java allows a subclass to inherit fields and methods of a superclass. Java supports single inheritance for classes and multiple inheritance through interfaces using the extends keyword.",
+    "key_points": [
+      "Uses extends keyword for class inheritance",
+      "Java supports only single inheritance for classes",
+      "Multiple inheritance achieved through interfaces",
+      "super keyword refers to the parent class",
+      "Method overriding: subclass provides specific implementation of a parent method",
+      "@Override annotation confirms you are overriding a parent method",
+      "All Java classes implicitly extend Object class"
+    ],
+    "examples": [
+      "class Animal { void makeSound() { System.out.println('Some sound'); } }",
+      "class Cat extends Animal { @Override void makeSound() { System.out.println('Meow'); } }",
+      "Cat c = new Cat(); c.makeSound(); // prints Meow"
+    ]
+  },
+  {
+    "subject": "Java",
+    "topic": "Exception Handling",
+    "difficulty": "intermediate",
+    "explanation": "Exception handling in Java is a mechanism to handle runtime errors gracefully, maintaining normal program flow. Java uses try-catch-finally blocks and throw/throws keywords.",
+    "key_points": [
+      "Exception: an event that disrupts normal program flow",
+      "try: block of code that might throw an exception",
+      "catch: block that handles the specific exception",
+      "finally: block that always executes (cleanup code)",
+      "throw: manually throw an exception",
+      "throws: declares that a method might throw certain exceptions",
+      "Checked exceptions must handle: IOException, SQLException",
+      "Unchecked exceptions (runtime): NullPointerException, ArrayIndexOutOfBoundsException"
+    ],
+    "examples": [
+      "try { int result = 10/0; } catch (ArithmeticException e) { System.out.println('Cannot divide by zero'); } finally { System.out.println('Always runs'); }",
+      "Custom exception: class InsufficientFundsException extends Exception { ... }"
+    ]
+  },
+  {
+    "subject": "Java",
+    "topic": "Interfaces",
+    "difficulty": "intermediate",
+    "explanation": "An interface in Java defines a contract - a set of methods that a class must implement. Interfaces achieve abstraction and multiple inheritance. All methods are public and abstract by default.",
+    "key_points": [
+      "Defines a contract using interface keyword",
+      "Uses implements keyword to use an interface",
+      "All methods are public and abstract by default (before Java 8)",
+      "Java 8+: interfaces can have default and static methods",
+      "A class can implement multiple interfaces",
+      "Interface variables are public, static, and final by default"
+    ],
+    "examples": [
+      "interface Drawable { void draw(); }",
+      "class Circle implements Drawable { public void draw() { System.out.println('Drawing circle'); } }",
+      "class Bird implements Drawable, Flyable { ... } // multiple interfaces"
+    ]
+  },
+  {
+    "subject": "Java",
+    "topic": "Collections",
+    "difficulty": "intermediate",
+    "explanation": "The Java Collections Framework provides classes and interfaces for storing and manipulating groups of objects. It includes ArrayList, LinkedList, HashMap, HashSet, etc.",
+    "key_points": [
+      "List: ordered collection, allows duplicates (ArrayList, LinkedList)",
+      "Set: unordered collection, no duplicates (HashSet, TreeSet)",
+      "Map: key-value pairs, no duplicate keys (HashMap, TreeMap)",
+      "Queue: FIFO structure (LinkedList, PriorityQueue)",
+      "Collections class provides utility methods: sort(), reverse(), shuffle()",
+      "Generics ensure type safety: ArrayList<String>, HashMap<Integer, String>"
+    ],
+    "examples": [
+      "ArrayList<String> list = new ArrayList<>(); list.add('Apple'); list.get(0);",
+      "HashMap<String, Integer> map = new HashMap<>(); map.put('Alice', 90); map.get('Alice');",
+      "HashSet<Integer> set = new HashSet<>(); set.add(1); set.add(1); // size is 1"
+    ]
+  },
+  {
+    "subject": "Computer Networks",
+    "topic": "OSI Model",
+    "difficulty": "beginner",
+    "explanation": "The OSI (Open Systems Interconnection) model is a conceptual framework that standardizes network communication into 7 layers, each with specific responsibilities.",
+    "key_points": [
+      "Layer 7 - Application: User interface (HTTP, FTP, SMTP, DNS)",
+      "Layer 6 - Presentation: Data format, encryption, compression",
+      "Layer 5 - Session: Manages sessions between applications",
+      "Layer 4 - Transport: End-to-end communication (TCP, UDP)",
+      "Layer 3 - Network: Logical addressing, routing (IP, ICMP)",
+      "Layer 2 - Data Link: Physical addressing MAC, framing (Ethernet, Wi-Fi)",
+      "Layer 1 - Physical: Bits over physical medium (cables, signals)"
+    ],
+    "examples": [
+      "When you send an email, it goes through all 7 layers on sender and receiver",
+      "HTTP operates at Application layer; TCP at Transport; IP at Network"
+    ]
+  },
+  {
+    "subject": "Computer Networks",
+    "topic": "TCP vs UDP",
+    "difficulty": "beginner",
+    "explanation": "TCP is connection-oriented and reliable. UDP is connectionless and faster but unreliable. Both are transport layer protocols.",
+    "key_points": [
+      "TCP: Connection-oriented (three-way handshake: SYN, SYN-ACK, ACK)",
+      "TCP: Reliable - guarantees delivery, ordering, and error checking",
+      "TCP: Slower due to overhead of acknowledgments",
+      "TCP uses: HTTP/HTTPS, FTP, email (SMTP)",
+      "UDP: Connectionless - no handshake",
+      "UDP: Unreliable but faster - no guarantee of delivery",
+      "UDP uses: Video streaming, gaming, VoIP, DNS"
+    ],
+    "examples": [
+      "Downloading a file uses TCP - every bit must arrive correctly",
+      "Video call uses UDP - better to drop a frame than pause the call",
+      "DNS uses UDP for quick lookups"
+    ]
+  },
+  {
+    "subject": "Computer Networks",
+    "topic": "IP Addressing",
+    "difficulty": "intermediate",
+    "explanation": "An IP address is a unique numerical label assigned to each device on a network. IPv4 uses 32-bit addresses. IPv6 uses 128-bit addresses. Subnetting divides a network into smaller sub-networks.",
+    "key_points": [
+      "IPv4: 32-bit address written as 4 octets (e.g., 192.168.1.100)",
+      "IPv6: 128-bit address to solve IPv4 exhaustion",
+      "Private IP ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
+      "Subnet mask determines network vs host portion",
+      "CIDR notation: 192.168.1.0/24 means 24 bits are network bits",
+      "NAT maps private IPs to public IP"
+    ],
+    "examples": [
+      "192.168.1.0/24: network with 256 addresses, 254 usable hosts",
+      "10.0.0.1 is a private IP (home router default gateway)",
+      "DNS translates domain names to IP addresses"
+    ]
+  },
+  {
+    "subject": "Computer Networks",
+    "topic": "HTTP and HTTPS",
+    "difficulty": "beginner",
+    "explanation": "HTTP is the protocol for transmitting web pages. HTTPS is the encrypted version using SSL/TLS. HTTP operates on port 80, HTTPS on port 443.",
+    "key_points": [
+      "HTTP: stateless, application-layer protocol for web communication",
+      "Methods: GET (retrieve), POST (submit), PUT (update), DELETE (remove)",
+      "Status codes: 200 OK, 301 Redirect, 404 Not Found, 500 Internal Server Error",
+      "HTTPS = HTTP + SSL/TLS encryption for security",
+      "HTTPS prevents eavesdropping and man-in-the-middle attacks"
+    ],
+    "examples": [
+      "GET /index.html HTTP/1.1 - retrieving a web page",
+      "POST /login with username and password in request body",
+      "200 OK means success; 404 Not Found means page does not exist"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Array",
+    "difficulty": "beginner",
+    "explanation": "An array stores elements of the same data type in contiguous memory locations. Elements are accessed using an index starting from 0. Arrays have a fixed size.",
+    "key_points": [
+      "Fixed size, contiguous memory allocation",
+      "Zero-indexed: first element at index 0, last at index n-1",
+      "Access time: O(1) - direct access by index",
+      "Insertion/Deletion: O(n) - elements must be shifted",
+      "Search: O(n) linear, O(log n) if sorted (binary search)",
+      "Static arrays vs Dynamic arrays (ArrayList in Java, vector in C++)"
+    ],
+    "examples": [
+      "int arr[5] = {10, 20, 30, 40, 50}; arr[2] gives 30",
+      "Matrix: int matrix[3][3] for a 3x3 grid",
+      "Storing marks of 100 students: int marks[100];"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Linked List",
+    "difficulty": "beginner",
+    "explanation": "A linked list stores elements in non-contiguous memory locations. Each node contains data and a pointer to the next node. Unlike arrays, linked lists can grow and shrink dynamically.",
+    "key_points": [
+      "Each node has: data + pointer to next node",
+      "Head pointer points to the first node; null pointer at the end",
+      "Dynamic size - can grow/shrink at runtime",
+      "Insertion/Deletion: O(1) if position known, O(n) to find position",
+      "Access: O(n) - must traverse from head",
+      "Types: Singly, Doubly, Circular linked list"
+    ],
+    "examples": [
+      "10 -> 20 -> 30 -> 40 -> NULL (singly linked list)",
+      "NULL <- 10 <-> 20 <-> 30 -> NULL (doubly linked list)",
+      "Browser history: each page links to previous and next page"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Stack",
+    "difficulty": "beginner",
+    "explanation": "A stack is a linear data structure following LIFO (Last In, First Out). The last element added is the first one removed, like a stack of plates.",
+    "key_points": [
+      "LIFO: Last In, First Out",
+      "Push: add element to top",
+      "Pop: remove element from top",
+      "Peek/Top: view top element without removing",
+      "All operations: O(1) time complexity",
+      "Applications: Function call stack, undo operations, expression evaluation, backtracking"
+    ],
+    "examples": [
+      "Browser back button: pages are pushed as you navigate, popped when you go back",
+      "Undo (Ctrl+Z) in text editors uses a stack",
+      "Checking balanced parentheses: push '(' and pop when ')' is encountered"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Queue",
+    "difficulty": "beginner",
+    "explanation": "A queue is a linear data structure following FIFO (First In, First Out). The first element added is the first one removed, like a real-world queue at a bank.",
+    "key_points": [
+      "FIFO: First In, First Out",
+      "Enqueue: add element to the rear",
+      "Dequeue: remove element from the front",
+      "Types: Simple Queue, Circular Queue, Priority Queue, Deque",
+      "Applications: CPU scheduling, print spooling, BFS traversal",
+      "Enqueue/Dequeue: O(1) time complexity"
+    ],
+    "examples": [
+      "Printer queue: first document sent is first document printed",
+      "Bank customer line: first customer to arrive is first served",
+      "BFS (Breadth First Search) uses a queue"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Binary Search Tree",
+    "difficulty": "intermediate",
+    "explanation": "A BST is a binary tree where for each node, all left subtree values are smaller, and all right subtree values are larger. This enables efficient searching, insertion, and deletion.",
+    "key_points": [
+      "For each node: left subtree values < node value < right subtree values",
+      "Search, Insert, Delete: O(log n) average, O(n) worst case (unbalanced)",
+      "In-order traversal gives elements in sorted order",
+      "Balanced BST (AVL tree, Red-Black tree): guarantees O(log n)",
+      "Applications: Dictionaries, database indexing, priority queues"
+    ],
+    "examples": [
+      "BST with root 50: left subtree has 30, 20, 40; right subtree has 70, 60, 80",
+      "Searching 40: start at 50 (go left), check 30 (go right), find 40"
+    ]
+  },
+  {
+    "subject": "Data Structures",
+    "topic": "Sorting Algorithms",
+    "difficulty": "intermediate",
+    "explanation": "Sorting algorithms arrange elements in a specific order. Common algorithms: Bubble Sort, Merge Sort, Quick Sort each with different time and space complexities.",
+    "key_points": [
+      "Bubble Sort: O(n squared) - repeatedly swap adjacent elements if out of order",
+      "Selection Sort: O(n squared) - find minimum, place at beginning",
+      "Insertion Sort: O(n squared) - good for nearly sorted data",
+      "Merge Sort: O(n log n) - divide and conquer; stable; uses extra space O(n)",
+      "Quick Sort: O(n log n) average, O(n squared) worst - partition around pivot",
+      "Stable sort preserves relative order of equal elements"
+    ],
+    "examples": [
+      "Merge Sort divides array into halves, sorts each, then merges",
+      "Quick Sort picks a pivot and partitions smaller elements left, larger right",
+      "Insertion Sort: like sorting playing cards in hand"
+    ]
+  }
+]
