@@ -1,122 +1,137 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <aside className="sidebar">
+        <div className="logo">
+          <div className="logo-icon">AI</div>
+          <div>
+            <h2>StudyAI</h2>
+            <p>Learning Assistant</p>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <nav>
+          <button className="nav-item active">🏠 Dashboard</button>
+          <button className="nav-item">📚 Study Materials</button>
+          <button className="nav-item">📝 Quiz</button>
+          <button className="nav-item">📅 Study Plan</button>
+          <button className="nav-item">📊 Progress</button>
+          <button className="nav-item">🕘 History</button>
+        </nav>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="sidebar-bottom">
+          <p>Powered by</p>
+          <strong>Qwen2.5 + LangGraph + MCP</strong>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </aside>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <main className="main-content">
+        <header className="topbar">
+          <div>
+            <p className="greeting">Good morning 👋</p>
+            <h1>Ready to learn?</h1>
+          </div>
+
+          <div className="profile">
+            <div className="avatar">S</div>
+            <span>Student</span>
+          </div>
+        </header>
+
+        <section className="hero">
+          <div>
+            <span className="badge">AI STUDY ASSISTANT</span>
+            <h2>What do you want to learn today?</h2>
+            <p>
+              Ask questions, generate quizzes, create study plans,
+              and track your learning progress.
+            </p>
+          </div>
+        </section>
+
+        <section className="ask-card">
+          <div className="ask-icon">✨</div>
+
+          <div className="ask-content">
+            <h3>Ask your AI tutor</h3>
+
+            <div className="input-row">
+              <input
+                type="text"
+                placeholder="Ask anything about your studies..."
+              />
+              <button>Ask AI →</button>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-header">
+            <h2>Quick Actions</h2>
+            <span>Start learning</span>
+          </div>
+
+          <div className="quick-actions">
+            <div className="action-card">
+              <div className="action-icon">💡</div>
+              <h3>Ask a Question</h3>
+              <p>Get simple explanations for difficult topics.</p>
+            </div>
+
+            <div className="action-card">
+              <div className="action-icon">📝</div>
+              <h3>Generate Quiz</h3>
+              <p>Test your knowledge with an AI-generated quiz.</p>
+            </div>
+
+            <div className="action-card">
+              <div className="action-icon">📅</div>
+              <h3>Create Study Plan</h3>
+              <p>Build a study plan based on your available time.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-header">
+            <h2>Recent Activity</h2>
+            <span>View all</span>
+          </div>
+
+          <div className="activity-card">
+            <div className="activity-item">
+              <span>🧠</span>
+              <div>
+                <strong>Operating Systems</strong>
+                <p>Process Management</p>
+              </div>
+              <small>Today</small>
+            </div>
+
+            <div className="activity-item">
+              <span>📝</span>
+              <div>
+                <strong>DBMS Quiz</strong>
+                <p>Normalization · 4/5</p>
+              </div>
+              <small>Today</small>
+            </div>
+
+            <div className="activity-item">
+              <span>💻</span>
+              <div>
+                <strong>C++</strong>
+                <p>Inheritance</p>
+              </div>
+              <small>Today</small>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
