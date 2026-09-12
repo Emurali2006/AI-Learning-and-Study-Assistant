@@ -354,3 +354,25 @@ nav {
     padding: 12px;
   }
 }
+.ai-response {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #f5f7ff;
+  border: 1px solid #e4e7f5;
+}
+
+.ai-response strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.ai-response p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.input-row button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

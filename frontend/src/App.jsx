@@ -1,6 +1,36 @@
+import { useState } from "react";
 import "./App.css";
-
 function App() {
+  const [question, setQuestion] = useState("");
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const askAI = async () => {
+    if (!question.trim()) return;
+
+    setLoading(true);
+    setResponse("");
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: question,
+        }),
+      });
+
+      const data = await res.json();
+      setResponse(data.response);
+    } catch (error) {
+      setResponse("Unable to connect to the AI server.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="app">
       <aside className="sidebar">
@@ -61,9 +91,25 @@ function App() {
               <input
                 type="text"
                 placeholder="Ask anything about your studies..."
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    askAI();
+                  }
+                }}
               />
-              <button>Ask AI →</button>
+
+              <button onClick={askAI} disabled={loading}>
+                {loading ? "Thinking..." : "Ask AI →"}
+              </button>
             </div>
+            {response && (
+              <div className="ai-response">
+                <strong>AI Tutor</strong>
+                <p>{response}</p>
+              </div>
+            )}
           </div>
         </section>
 
