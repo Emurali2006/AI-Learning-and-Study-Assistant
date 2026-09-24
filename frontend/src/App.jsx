@@ -1,9 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+
 function App() {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // NEW: State to hold our database history
+  const [recentHistory, setRecentHistory] = useState([]);
+
+  // NEW: Function to fetch history from FastAPI
+  const fetchHistory = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/history");
+      const data = await res.json();
+      if (data.status === "success" && data.data) {
+        setRecentHistory(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch history:", error);
+    }
+  };
+
+  // NEW: Run the fetch when the app first loads
+  useEffect(() => {
+    fetchHistory();
+  }, []);
 
   const askAI = async () => {
     if (!question.trim()) return;
@@ -24,6 +46,9 @@ function App() {
 
       const data = await res.json();
       setResponse(data.response);
+      
+      // NEW: Refresh the activity list after the AI answers!
+      fetchHistory();
     } catch (error) {
       setResponse("Unable to connect to the AI server.");
       console.error(error);
@@ -31,6 +56,7 @@ function App() {
       setLoading(false);
     }
   };
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -147,32 +173,32 @@ function App() {
           </div>
 
           <div className="activity-card">
-            <div className="activity-item">
-              <span>🧠</span>
-              <div>
-                <strong>Operating Systems</strong>
-                <p>Process Management</p>
-              </div>
-              <small>Today</small>
-            </div>
-
-            <div className="activity-item">
-              <span>📝</span>
-              <div>
-                <strong>DBMS Quiz</strong>
-                <p>Normalization · 4/5</p>
-              </div>
-              <small>Today</small>
-            </div>
-
-            <div className="activity-item">
-              <span>💻</span>
-              <div>
-                <strong>C++</strong>
-                <p>Inheritance</p>
-              </div>
-              <small>Today</small>
-            </div>
+            {/* NEW: Map through real database data instead of hardcoded HTML */}
+            {recentHistory.length > 0 ? (
+              recentHistory.slice(0, 5).map((item, index) => (
+                <div className="activity-item" key={index}>
+                  <span>🧠</span>
+                  <div>
+                    {/* Truncate long queries so they fit nicely */}
+                    <strong>
+                      {item.query 
+                        ? (item.query.length > 40 ? item.query.substring(0, 40) + "..." : item.query) 
+                        : "AI Chat"}
+                    </strong>
+                    <p>Study Session</p>
+                  </div>
+                  <small>
+                    {item.timestamp 
+                      ? new Date(item.timestamp).toLocaleDateString() 
+                      : "Recently"}
+                  </small>
+                </div>
+              ))
+            ) : (
+              <p style={{ padding: "1rem", color: "#666" }}>
+                No recent activity yet. Ask a question to get started!
+              </p>
+            )}
           </div>
         </section>
       </main>
