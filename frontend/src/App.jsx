@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
 
 function App() {
@@ -22,12 +23,12 @@ function App() {
   const [planResponse, setPlanResponse] = useState("");
   const [isPlanLoading, setIsPlanLoading] = useState(false);
 
-  // NEW: Study Materials State
+  // Study Materials State
   const [materialQuery, setMaterialQuery] = useState("");
   const [materialResponse, setMaterialResponse] = useState("");
   const [isMaterialLoading, setIsMaterialLoading] = useState(false);
 
-  // NEW: Progress State
+  // Progress State
   const [progressResponse, setProgressResponse] = useState("");
   const [isProgressLoading, setIsProgressLoading] = useState(false);
 
@@ -163,10 +164,10 @@ function App() {
           </div>
         );
       } catch (e) {
-        return <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{text}</pre>;
+        return <div style={{ marginTop: "10px" }}><ReactMarkdown>{text}</ReactMarkdown></div>;
       }
     }
-    return <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{text}</pre>;
+    return <div style={{ marginTop: "10px" }}><ReactMarkdown>{text}</ReactMarkdown></div>;
   };
 
   return (
@@ -227,7 +228,10 @@ function App() {
                 {response && (
                   <div className="ai-response">
                     <strong>AI Tutor</strong>
-                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "10px" }}>{response}</pre>
+                    {/* NEW: Markdown renderer for dashboard chat */}
+                    <div style={{ marginTop: "10px", lineHeight: "1.6" }}>
+                      <ReactMarkdown>{response}</ReactMarkdown>
+                    </div>
                   </div>
                 )}
               </div>
@@ -280,7 +284,6 @@ function App() {
           </>
         )}
 
-        {/* --- NEW: STUDY MATERIALS SEARCH --- */}
         {activeTab === "materials" && (
           <section className="section">
             <div className="section-header">
@@ -305,9 +308,10 @@ function App() {
                 {materialResponse && (
                   <div className="ai-response" style={{ marginTop: "20px" }}>
                     <strong>Results for: {materialQuery}</strong>
-                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
-                      {materialResponse}
-                    </pre>
+                    {/* NEW: Markdown renderer for study materials */}
+                    <div style={{ marginTop: "15px", lineHeight: "1.6" }}>
+                      <ReactMarkdown>{materialResponse}</ReactMarkdown>
+                    </div>
                   </div>
                 )}
               </div>
@@ -352,9 +356,10 @@ function App() {
                 {planResponse && (
                   <div className="ai-response" style={{ marginTop: "20px" }}>
                     <strong>Study Plan: {planTopic} ({planDuration} Hours)</strong>
-                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
-                      {planResponse.replace("__PLAN__", "").trim()}
-                    </pre>
+                    {/* NEW: Markdown renderer for study plan */}
+                    <div style={{ marginTop: "15px", lineHeight: "1.6" }}>
+                      <ReactMarkdown>{planResponse.replace("__PLAN__", "").trim()}</ReactMarkdown>
+                    </div>
                   </div>
                 )}
               </div>
@@ -362,7 +367,6 @@ function App() {
           </section>
         )}
 
-        {/* --- NEW: PROGRESS SUMMARY --- */}
         {activeTab === "progress" && (
           <section className="section">
             <div className="section-header">
@@ -381,9 +385,10 @@ function App() {
                 {progressResponse && (
                   <div className="ai-response" style={{ marginTop: "20px" }}>
                     <strong>AI Progress Summary</strong>
-                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
-                      {progressResponse}
-                    </pre>
+                    {/* NEW: Markdown renderer for progress summary */}
+                    <div style={{ marginTop: "15px", lineHeight: "1.6" }}>
+                      <ReactMarkdown>{progressResponse}</ReactMarkdown>
+                    </div>
                   </div>
                 )}
               </div>
