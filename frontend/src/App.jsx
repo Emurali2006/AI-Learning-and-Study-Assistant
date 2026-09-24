@@ -2,17 +2,36 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  // --- States ---
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [recentHistory, setRecentHistory] = useState([]);
+
+  // Dashboard Chat State
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const [recentHistory, setRecentHistory] = useState([]);
-  
-  const [activeTab, setActiveTab] = useState("dashboard");
 
+  // Quiz State
   const [quizTopic, setQuizTopic] = useState("");
   const [quizResponse, setQuizResponse] = useState("");
   const [isQuizLoading, setIsQuizLoading] = useState(false);
 
+  // Study Plan State
+  const [planTopic, setPlanTopic] = useState("");
+  const [planDuration, setPlanDuration] = useState("");
+  const [planResponse, setPlanResponse] = useState("");
+  const [isPlanLoading, setIsPlanLoading] = useState(false);
+
+  // NEW: Study Materials State
+  const [materialQuery, setMaterialQuery] = useState("");
+  const [materialResponse, setMaterialResponse] = useState("");
+  const [isMaterialLoading, setIsMaterialLoading] = useState(false);
+
+  // NEW: Progress State
+  const [progressResponse, setProgressResponse] = useState("");
+  const [isProgressLoading, setIsProgressLoading] = useState(false);
+
+  // --- API Calls ---
   const fetchHistory = async () => {
     try {
       const res = await fetch("http://127.0.0.1:8000/api/history");
@@ -29,27 +48,28 @@ function App() {
     fetchHistory();
   }, []);
 
+  const sendToAI = async (message) => {
+    const res = await fetch("http://127.0.0.1:8000/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+    if (!res.ok) throw new Error(`Server returned status: ${res.status}`);
+    const data = await res.json();
+    fetchHistory();
+    return data.response;
+  };
+
+  // --- Handlers ---
   const askAI = async () => {
     if (!question.trim()) return;
-
     setLoading(true);
     setResponse("");
-
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: question }),
-      });
-
-      if (!res.ok) throw new Error(`Server returned status: ${res.status}`);
-
-      const data = await res.json();
-      setResponse(data.response);
-      fetchHistory();
+      const reply = await sendToAI(question);
+      setResponse(reply);
     } catch (error) {
       setResponse(`Diagnostic Error: ${error.message}`);
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -57,37 +77,65 @@ function App() {
 
   const handleGenerateQuiz = async () => {
     if (!quizTopic.trim()) return;
-
     setIsQuizLoading(true);
     setQuizResponse("");
-
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: `Generate a multiple choice quiz about: ${quizTopic}.` }),
-      });
-
-      if (!res.ok) throw new Error(`Server returned status: ${res.status}`);
-
-      const data = await res.json();
-      setQuizResponse(data.response);
-      fetchHistory();
+      const reply = await sendToAI(`Generate a multiple choice quiz about: ${quizTopic}.`);
+      setQuizResponse(reply);
     } catch (error) {
       setQuizResponse(`Error: ${error.message}`);
-      console.error(error);
     } finally {
       setIsQuizLoading(false);
     }
   };
 
-  // NEW: Helper function to beautifully render the raw __QUIZ__ JSON data
+  const handleGeneratePlan = async () => {
+    if (!planTopic.trim() || !planDuration.trim()) return;
+    setIsPlanLoading(true);
+    setPlanResponse("");
+    try {
+      const reply = await sendToAI(`Create a study plan for: ${planTopic} lasting ${planDuration} hours.`);
+      setPlanResponse(reply);
+    } catch (error) {
+      setPlanResponse(`Error: ${error.message}`);
+    } finally {
+      setIsPlanLoading(false);
+    }
+  };
+
+  const handleSearchMaterials = async () => {
+    if (!materialQuery.trim()) return;
+    setIsMaterialLoading(true);
+    setMaterialResponse("");
+    try {
+      const reply = await sendToAI(`Search my study materials for: ${materialQuery}`);
+      setMaterialResponse(reply);
+    } catch (error) {
+      setMaterialResponse(`Error: ${error.message}`);
+    } finally {
+      setIsMaterialLoading(false);
+    }
+  };
+
+  const handleGetProgress = async () => {
+    setIsProgressLoading(true);
+    setProgressResponse("");
+    try {
+      const reply = await sendToAI(`Provide a detailed summary of my learning progress based on my history and quiz results.`);
+      setProgressResponse(reply);
+    } catch (error) {
+      setProgressResponse(`Error: ${error.message}`);
+    } finally {
+      setIsProgressLoading(false);
+    }
+  };
+
+  // --- UI Renderers ---
   const renderQuizContent = (text) => {
     if (text.includes("__QUIZ__")) {
       try {
         const jsonString = text.split("__QUIZ__")[1].trim();
         const quizData = JSON.parse(jsonString);
-
         return (
           <div style={{ textAlign: "left", marginTop: "1rem" }}>
             <h4 style={{ color: "#2563eb", marginBottom: "1rem" }}>Subject: {quizData.subject}</h4>
@@ -115,11 +163,9 @@ function App() {
           </div>
         );
       } catch (e) {
-        // Fallback if JSON parsing fails
         return <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{text}</pre>;
       }
     }
-    // Fallback for normal text responses
     return <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{text}</pre>;
   };
 
@@ -170,19 +216,12 @@ function App() {
                 <p>Ask questions, generate quizzes, create study plans, and track your learning progress.</p>
               </div>
             </section>
-
             <section className="ask-card">
               <div className="ask-icon">✨</div>
               <div className="ask-content">
                 <h3>Ask your AI tutor</h3>
                 <div className="input-row">
-                  <input
-                    type="text"
-                    placeholder="Ask anything about your studies..."
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") askAI(); }}
-                  />
+                  <input type="text" placeholder="Ask anything about your studies..." value={question} onChange={(e) => setQuestion(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") askAI(); }} />
                   <button onClick={askAI} disabled={loading}>{loading ? "Thinking..." : "Ask AI →"}</button>
                 </div>
                 {response && (
@@ -193,7 +232,6 @@ function App() {
                 )}
               </div>
             </section>
-
             <section className="section">
               <div className="section-header">
                 <h2>Quick Actions</h2>
@@ -217,7 +255,6 @@ function App() {
                 </div>
               </div>
             </section>
-
             <section className="section">
               <div className="section-header">
                 <h2>Recent Activity</h2>
@@ -243,34 +280,55 @@ function App() {
           </>
         )}
 
-        {activeTab === "quiz" && (
+        {/* --- NEW: STUDY MATERIALS SEARCH --- */}
+        {activeTab === "materials" && (
           <section className="section">
             <div className="section-header">
-              <h2>📝 AI Quiz Generator</h2>
+              <h2>📚 Study Materials Search</h2>
             </div>
-            
+            <div className="ask-card" style={{ marginTop: "20px" }}>
+              <div className="ask-icon">🔍</div>
+              <div className="ask-content" style={{ width: "100%" }}>
+                <h3>Search your knowledge base</h3>
+                <div className="input-row">
+                  <input
+                    type="text"
+                    placeholder="e.g., What are the ACID properties in DBMS?"
+                    value={materialQuery}
+                    onChange={(e) => setMaterialQuery(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleSearchMaterials(); }}
+                  />
+                  <button onClick={handleSearchMaterials} disabled={isMaterialLoading}>
+                    {isMaterialLoading ? "Searching..." : "Search"}
+                  </button>
+                </div>
+                {materialResponse && (
+                  <div className="ai-response" style={{ marginTop: "20px" }}>
+                    <strong>Results for: {materialQuery}</strong>
+                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
+                      {materialResponse}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {activeTab === "quiz" && (
+          <section className="section">
+            <div className="section-header"><h2>📝 AI Quiz Generator</h2></div>
             <div className="ask-card" style={{ marginTop: "20px" }}>
               <div className="ask-icon">📝</div>
               <div className="ask-content" style={{ width: "100%" }}>
                 <h3>What topic do you want to test yourself on?</h3>
-                
                 <div className="input-row">
-                  <input
-                    type="text"
-                    placeholder="e.g., Database Normalization, Python Basics, Physics..."
-                    value={quizTopic}
-                    onChange={(e) => setQuizTopic(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleGenerateQuiz(); }}
-                  />
-                  <button onClick={handleGenerateQuiz} disabled={isQuizLoading}>
-                    {isQuizLoading ? "Generating..." : "Generate Quiz"}
-                  </button>
+                  <input type="text" placeholder="e.g., Database Normalization, Python Basics..." value={quizTopic} onChange={(e) => setQuizTopic(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleGenerateQuiz(); }} />
+                  <button onClick={handleGenerateQuiz} disabled={isQuizLoading}>{isQuizLoading ? "Generating..." : "Generate Quiz"}</button>
                 </div>
-
                 {quizResponse && (
                   <div className="ai-response" style={{ marginTop: "20px" }}>
                     <strong>Your Quiz on: {quizTopic}</strong>
-                    {/* NEW: Using our helper function to render the UI */}
                     {renderQuizContent(quizResponse)}
                   </div>
                 )}
@@ -279,32 +337,63 @@ function App() {
           </section>
         )}
 
-        {activeTab === "materials" && (
-          <section className="section">
-            <h2>📚 Study Materials</h2>
-            <p>Your uploaded PDFs and study content will appear here.</p>
-          </section>
-        )}
-
         {activeTab === "plan" && (
           <section className="section">
-            <h2>📅 Study Planner</h2>
-            <p>Feature coming soon! Generate structured study schedules.</p>
+            <div className="section-header"><h2>📅 AI Study Planner</h2></div>
+            <div className="ask-card" style={{ marginTop: "20px" }}>
+              <div className="ask-icon">📅</div>
+              <div className="ask-content" style={{ width: "100%" }}>
+                <h3>What do you want to study, and how much time do you have?</h3>
+                <div className="input-row" style={{ display: 'flex', gap: '10px' }}>
+                  <input type="text" placeholder="Topic (e.g., React Hooks)" value={planTopic} onChange={(e) => setPlanTopic(e.target.value)} style={{ flex: "2" }} />
+                  <input type="number" placeholder="Hours" value={planDuration} onChange={(e) => setPlanDuration(e.target.value)} style={{ flex: "1" }} onKeyDown={(e) => { if (e.key === "Enter") handleGeneratePlan(); }} min="1" />
+                  <button onClick={handleGeneratePlan} disabled={isPlanLoading}>{isPlanLoading ? "Planning..." : "Create Plan"}</button>
+                </div>
+                {planResponse && (
+                  <div className="ai-response" style={{ marginTop: "20px" }}>
+                    <strong>Study Plan: {planTopic} ({planDuration} Hours)</strong>
+                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
+                      {planResponse.replace("__PLAN__", "").trim()}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </div>
           </section>
         )}
 
+        {/* --- NEW: PROGRESS SUMMARY --- */}
         {activeTab === "progress" && (
           <section className="section">
-            <h2>📊 Your Progress</h2>
-            <p>Feature coming soon! View your quiz scores and completion stats.</p>
+            <div className="section-header">
+              <h2>📊 Your Learning Progress</h2>
+            </div>
+            <div className="ask-card" style={{ marginTop: "20px" }}>
+              <div className="ask-icon">📈</div>
+              <div className="ask-content" style={{ width: "100%" }}>
+                <h3>Check how far you've come</h3>
+                <p style={{ color: "#666", marginBottom: "15px" }}>
+                  Generate an AI summary of your completed quizzes, active study plans, and overall activity.
+                </p>
+                <button onClick={handleGetProgress} disabled={isProgressLoading} style={{ width: "fit-content", padding: "10px 20px" }}>
+                  {isProgressLoading ? "Analyzing Data..." : "Generate Progress Report"}
+                </button>
+                {progressResponse && (
+                  <div className="ai-response" style={{ marginTop: "20px" }}>
+                    <strong>AI Progress Summary</strong>
+                    <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit", marginTop: "15px", lineHeight: "1.6" }}>
+                      {progressResponse}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </div>
           </section>
         )}
 
         {activeTab === "history" && (
           <section className="section">
-            <div className="section-header">
-              <h2>🕘 Full Study History</h2>
-            </div>
+            <div className="section-header"><h2>🕘 Full Study History</h2></div>
             <div className="activity-card" style={{ marginTop: "20px" }}>
               {recentHistory.length > 0 ? (
                 recentHistory.map((item, index) => (
